@@ -6,7 +6,6 @@ This repository demonstrates how to implement load balancing for a Golang applic
 
 - [Introduction](#introduction)
 - [Prerequisites](#prerequisites)
-- [Project Structure](#project-structure)
 - [Setup Instructions](#setup-instructions)
   - [1. Clone the Repository](#1-clone-the-repository)
   - [2. Build and Run the Docker Containers](#2-build-and-run-the-docker-containers)
@@ -24,14 +23,6 @@ Before running this project, ensure you have the following installed:
 
 - [Docker](https://www.docker.com/get-started)
 - [Docker Compose](https://docs.docker.com/compose/install/)
-
-## Project Structure
-
-├── Dockerfile # Dockerfile for the Golang application
-├── docker-compose.yml # Docker Compose file to orchestrate the services
-├── nginx.conf # NGINX configuration file for load balancing
-├── main.go # Simple Golang HTTP server
-└── README.md # Instructions and information about the project
 
 ## Setup Instructions
 
