@@ -49,4 +49,3 @@ jobs:
           docker --version
           docker-compose --version
         EOF
-        
