@@ -17,10 +17,7 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Debug SSH Connection
-        run: |
-          echo "Checking SSH connectivity"
-          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_HOST }} "echo 'SSH connection successful'"
+     
 
       - name: Connect to EC2 and install Docker
         run: |
