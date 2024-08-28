@@ -21,7 +21,7 @@ jobs:
 
       - name: Connect to EC2 and install Docker
         run: |
-          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_HOST }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
             # Update and install Docker
             sudo yum update -y
             sudo amazon-linux-extras install docker -y
