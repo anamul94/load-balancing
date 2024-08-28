@@ -1,36 +1,50 @@
 name: Install Docker on EC2
 
 on:
-  push:
-    branches:
-      - main  # Change this to your default branch
+  workflow_dispatch:
+    inputs:
+      ec2_ip:
+        description: 'EC2 Instance IP'
+        required: true
+      ssh_private_key:
+        description: 'SSH Private Key'
+        required: true
 
 jobs:
   install-docker:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Set up SSH key
-        uses: webfactory/ssh-agent@v0.5.4
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+    - name: Setup SSH
+      uses: webfactory/ssh-agent@v0.5.0
+      with:
+        ssh-private-key: ${{ github.event.inputs.ssh_private_key }}
 
-     
+    - name: Install Docker and Docker Compose
+      env:
+        EC2_HOST: ${{ secrets.SSH_PRIVATE_KEY }}
+      run: |
+        ssh -o StrictHostKeyChecking=no ubuntu@$EC2_HOST '
+          # Update package list
+          sudo apt-get update
 
-      - name: Connect to EC2 and install Docker
-        run: |
-          ssh  ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
-            # Update and install Docker
-            sudo yum update -y
-            sudo amazon-linux-extras install docker -y
-            sudo service docker start
-            sudo usermod -aG docker ec2-user
-            # Install Docker Compose
-            sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-            sudo chmod +x /usr/local/bin/docker-compose
-            # Verify installation
-            docker --version
-            docker-compose --version
-          EOF
+          # Install Docker
+          sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+          sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+          sudo apt-get update
+          sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+
+          # Add current user to docker group
+          sudo usermod -aG docker $USER
+
+          # Install Docker Compose
+          sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+
+          # Verify installations
+          docker --version
+          docker-compose --version
+        '
