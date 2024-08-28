@@ -3,7 +3,7 @@ name: Install Docker on EC2
 on:
   push:
     branches:
-      - main # Change this to your default branch
+      - main  # Change this to your default branch
 
 jobs:
   install-docker:
@@ -12,14 +12,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@v1.1.1
+      - name: Set up SSH agent
+        uses: webfactory/ssh-agent@v0.5.3
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-private-key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
 
       - name: Connect to EC2 and install Docker
         run: |
-          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_HOST }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
             # Update and install Docker
             sudo yum update -y
             sudo amazon-linux-extras install docker -y
