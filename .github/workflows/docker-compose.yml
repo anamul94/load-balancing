@@ -1,51 +1,51 @@
 name: Install Docker and Docker Compose on AWS EC2
 
 on:
-  workflow_dispatch:  # This allows you to trigger the workflow manually from the Actions tab
+  workflow_dispatch: # This allows you to trigger the workflow manually from the Actions tab
 
 jobs:
   install:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up SSH
-      uses: webfactory/ssh-agent@v0.8.1
-      with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v1.1.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-    - name: Install Docker and Docker Compose
-      run: |
-        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
-          # Update package information and install prerequisites
-          sudo apt-get update
-          sudo apt-get install -y \
-              apt-transport-https \
-              ca-certificates \
-              curl \
-              software-properties-common
+      - name: Install Docker and Docker Compose
+        run: |
+          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
+            # Update package information and install prerequisites
+            sudo apt-get update
+            sudo apt-get install -y \
+                apt-transport-https \
+                ca-certificates \
+                curl \
+                software-properties-common
 
-          # Add Docker's official GPG key and set up the stable repository
-          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-          sudo add-apt-repository \
-              "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-              $(lsb_release -cs) \
-              stable"
+            # Add Docker's official GPG key and set up the stable repository
+            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+            sudo add-apt-repository \
+                "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+                $(lsb_release -cs) \
+                stable"
 
-          # Install Docker
-          sudo apt-get update
-          sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+            # Install Docker
+            sudo apt-get update
+            sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 
-          # Install Docker Compose
-          sudo curl -L "https://github.com/docker/compose/releases/download/v2.22.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-          sudo chmod +x /usr/local/bin/docker-compose
+            # Install Docker Compose
+            sudo curl -L "https://github.com/docker/compose/releases/download/v2.22.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+            sudo chmod +x /usr/local/bin/docker-compose
 
-          # Add user to the docker group (optional, depending on your setup)
-          sudo usermod -aG docker ubuntu
+            # Add user to the docker group (optional, depending on your setup)
+            sudo usermod -aG docker ubuntu
 
-          # Verify installations
-          docker --version
-          docker-compose --version
-        EOF
+            # Verify installations
+            docker --version
+            docker-compose --version
+          EOF
