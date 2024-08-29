@@ -39,7 +39,7 @@ jobs:
 
     - name: Deploy with Docker Compose
       run: |
-        cd /path/to/your/app
+        cd load-balancing
         docker-compose pull
         docker-compose up -d
 
