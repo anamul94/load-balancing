@@ -39,7 +39,7 @@ jobs:
 
     - name: Deploy with Docker Compose
       run: |
-        cd load-balancing
+        cd /home/ubuntu/actions-runner/_work/load-balancing/load-balancing
         docker-compose up -d
 
     - name: Clean up dangling Docker images
