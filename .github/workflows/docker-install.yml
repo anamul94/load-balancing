@@ -50,6 +50,6 @@ jobs:
           cd /home/ubuntu/actions-runner/_work/load-balancing/load-balancing
           docker-compose up -d
 
-      - name: Clean up dangling Docker images
-        run: |
-          docker image prune -f
+      # - name: Clean up dangling Docker images
+      #   run: |
+      #     docker image prune -f
