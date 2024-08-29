@@ -15,7 +15,7 @@ jobs:
 
     # - name: Install Docker and Docker Compose
     #   run: |
-    #     # Update the package list and install prerequisitess
+    #     # Update the package list and install prerequisites
     #     sudo apt-get update
     #     sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
 
